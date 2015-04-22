@@ -1,7 +1,11 @@
+import Color (..)
+import Graphics.Collage (..)
 import Graphics.Element (..)
-import Time
+import Keyboard
+import Signal (..)
+import Time (fps, inSeconds)
 import Window
-
+import List
 
 {-- Part 1: Model the user input ----------------------------------------------
 
@@ -17,8 +21,7 @@ type alias UserInput = {}
 
 
 userInput : Signal UserInput
-userInput =
-    Signal.constant {}
+userInput = constant {}
 
 
 type alias Input =
@@ -89,20 +92,14 @@ The following code puts it all together and shows it on screen.
 ------------------------------------------------------------------------------}
 
 delta : Signal Float
-delta =
-    Time.fps 30
+delta = inSeconds <~ fps 30
 
 
 input : Signal Input
-input =
-    Signal.sampleOn delta (Signal.map2 Input delta userInput)
-
+input = sampleOn delta (Input <~ delta ~ userInput)
 
 gameState : Signal GameState
-gameState =
-    Signal.foldp stepGame defaultGame input
-
+gameState = foldp stepGame defaultGame input
 
 main : Signal Element
-main =
-    Signal.map2 display Window.dimensions gameState
+main = display <~ Window.dimensions ~ gameState
