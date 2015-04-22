@@ -1,0 +1,13 @@
+{
+    "version": "1.0.0",
+    "summary": "some small examples to help you get started with elm-reactor",
+    "repository": "https://github.com/evancz/elm-examples.git",
+    "license": "BSD3",
+    "source-directories": [
+        "."
+    ],
+    "exposed-modules": [],
+    "dependencies": {
+        "elm-lang/core": "1.0.0 <= v < 2.0.0"
+    }
+}
