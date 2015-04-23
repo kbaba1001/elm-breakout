@@ -52,7 +52,7 @@ type alias Player = { x:Float, y:Float, vx:Float, vy:Float, w:Float, h:Float }
 type alias Block = { x:Float, y:Float, w:Float, h:Float }
 
 block x y w h = { x=x, y=y, w=w, h=h }
-(blockWidth, blockHeight) = (40,10)
+(blockWidth, blockHeight) = (40,20)
 
 type alias GameState =
   { ball : Ball
