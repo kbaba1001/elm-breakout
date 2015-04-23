@@ -67,7 +67,7 @@ Task: redefine `stepGame` to use the UserInput and GameState
 ------------------------------------------------------------------------------}
 
 stepGame : Input -> GameState -> GameState
-stepGame {timeDelta,userInput} ({ball,player,blocks} as gameState) =
+stepGame {timeDelta,userInput} ({ball,blocks,player} as gameState) =
   let
     ball' = ball
     blocks' = blocks
