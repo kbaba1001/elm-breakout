@@ -24,7 +24,7 @@ userInput : Signal UserInput
 userInput = UserInput <~ (.x <~ Keyboard.arrows)
 
 type alias Input =
-    { timeDelta : Float
+    { delta : Float
     , userInput : UserInput
     }
 
@@ -78,17 +78,18 @@ Task: redefine `stepGame` to use the UserInput and GameState
 ------------------------------------------------------------------------------}
 
 stepGame : Input -> GameState -> GameState
-stepGame {timeDelta,userInput} ({ball,player,blocks} as gameState) =
+stepGame {delta,userInput} ({ball,player,blocks} as gameState) =
   let
-    (ball', blocks') = stepBall timeDelta ball player blocks
+    (ball', blocks') = stepBall delta ball player blocks
+    player' = stepPlayer delta userInput.dir player
   in
     { gameState | ball <- ball'
-           , blocks <- blocks'
-           , player <- stepPlayer timeDelta userInput.dir player
+                , blocks <- blocks'
+                , player <- player'
     }
 
-stepPlayer deltaTime dir player =
-  let player' = stepObj deltaTime { player | vx <- toFloat dir * 200 }
+stepPlayer delta dir player =
+  let player' = stepObj delta { player | vx <- toFloat dir * 200 }
   in
     { player' |
         x <- clamp (22-halfWidth) (halfWidth-22) player'.x
@@ -126,10 +127,10 @@ stepV v lowerCollision upperCollision =
      | upperCollision -> 0 - abs v
      | otherwise      -> v
 
-stepObj t ({x,y,vx,vy} as obj) =
+stepObj delta ({x,y,vx,vy} as obj) =
   { obj |
-      x <- x + vx * t,
-      y <- y + vy * t
+      x <- x + vx * delta,
+      y <- y + vy * delta
   }
 
 {-- Part 4: Display the game --------------------------------------------------
@@ -164,12 +165,11 @@ The following code puts it all together and shows it on screen.
 
 ------------------------------------------------------------------------------}
 
-delta : Signal Float
-delta = inSeconds <~ fps 30
-
-
 input : Signal Input
 input =
+  let
+    delta = inSeconds <~ fps 30
+  in
     sampleOn delta (Input <~ delta ~ userInput)
 
 

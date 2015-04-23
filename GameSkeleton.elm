@@ -26,7 +26,7 @@ userInput = constant {}
 
 
 type alias Input =
-    { timeDelta : Float
+    { delta : Float
     , userInput : UserInput
     }
 
@@ -67,7 +67,7 @@ Task: redefine `stepGame` to use the UserInput and GameState
 ------------------------------------------------------------------------------}
 
 stepGame : Input -> GameState -> GameState
-stepGame {timeDelta,userInput} ({ball,blocks,player} as gameState) =
+stepGame {delta,userInput} ({ball,blocks,player} as gameState) =
   let
     ball' = ball
     blocks' = blocks
@@ -120,13 +120,12 @@ make obj shape =
 The following code puts it all together and shows it on screen.
 
 ------------------------------------------------------------------------------}
-
-delta : Signal Float
-delta = inSeconds <~ fps 30
-
-
 input : Signal Input
-input = sampleOn delta (Input <~ delta ~ userInput)
+input =
+  let
+    delta = inSeconds <~ fps 30
+  in
+    sampleOn delta (Input <~ delta ~ userInput)
 
 gameState : Signal GameState
 gameState = foldp stepGame defaultGame input
