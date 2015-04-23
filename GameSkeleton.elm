@@ -3,8 +3,9 @@ import Graphics.Collage (..)
 import Graphics.Element (..)
 import Keyboard
 import Signal (..)
-import Time (fps, inSeconds)
+import Time (fps, inSeconds, Time)
 import Window
+import Text
 import List
 
 {-- Part 1: Model the user input ----------------------------------------------
@@ -71,6 +72,22 @@ stepGame {timeDelta,userInput} gameState =
 
 
 
+near k c n = n >= k-c && n <= k+c
+
+within ball box = (ball.x |> near box.x (ball.r + box.w / 2))
+               && (ball.y |> near box.y (ball.r + box.h / 2))
+
+stepV v lowerCollision upperCollision =
+  if | lowerCollision -> abs v
+     | upperCollision -> 0 - abs v
+     | otherwise      -> v
+
+stepObj t ({x,y,vx,vy} as obj) =
+  { obj |
+      x <- x + vx * t,
+      y <- y + vy * t
+  }
+
 {-- Part 4: Display the game --------------------------------------------------
 
 How should the GameState be displayed to the user?
@@ -81,8 +98,13 @@ Task: redefine `display` to use the GameState you defined in part 2.
 
 display : (Int,Int) -> GameState -> Element
 display (w,h) gameState =
-    show gameState
+  container w h middle <|
+    Text.asText gameState
 
+make obj shape =
+  shape
+    |> filled white
+    |> move (obj.x, obj.y)
 
 
 {-- That's all folks! ---------------------------------------------------------
