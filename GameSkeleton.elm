@@ -67,7 +67,7 @@ Task: redefine `stepGame` to use the UserInput and GameState
 ------------------------------------------------------------------------------}
 
 stepGame : Input -> GameState -> GameState
-stepGame {timeDelta,userInput} gameState =
+stepGame {timeDelta,userInput} ({ball,player,blocks} as gameState) =
     gameState
 
 
@@ -97,7 +97,7 @@ Task: redefine `display` to use the GameState you defined in part 2.
 ------------------------------------------------------------------------------}
 
 display : (Int,Int) -> GameState -> Element
-display (w,h) gameState =
+display (w,h) ({ball,player,blocks} as gameState) =
   container w h middle <|
     Text.asText gameState
 
