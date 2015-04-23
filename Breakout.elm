@@ -47,19 +47,12 @@ be an empty list (no objects at the start):
 (gameWidth,gameHeight) = (400, 600)
 (halfWidth,halfHeight) = (200, 300)
 
-type alias Positioned a = { a | x:Float, y:Float }
-type alias Moving     a = { a | vx:Float, vy:Float }
-type alias Sized      a = { a | w:Float, h:Float }
-type alias Box          = Sized (Positioned {})
+type alias Ball = { x:Float, y:Float, vx:Float, vy:Float, r:Float }
+type alias Player = { x:Float, y:Float, vx:Float, vy:Float, w:Float, h:Float }
+type alias Block = { x:Float, y:Float, w:Float, h:Float }
 
-type alias Ball = Moving (Positioned { r:Float })
-type alias Player = Moving Box
-type alias Block = Box
-
-block : Float -> Float -> Float -> Float -> Block
 block x y w h = { x=x, y=y, w=w, h=h }
 (blockWidth, blockHeight) = (40,10)
-
 
 type alias GameState =
   { ball : Ball
